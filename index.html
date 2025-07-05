@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hacker Panel Giriş</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .login-box {
+      border: 1px solid lime;
+      padding: 20px;
+      background-color: #111;
+      text-align: center;
+    }
+
+    input {
+      padding: 8px;
+      background: black;
+      color: lime;
+      border: 1px solid lime;
+      margin-bottom: 10px;
+      width: 200px;
+    }
+
+    button {
+      padding: 8px 15px;
+      background: lime;
+      color: black;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .horizontal {
+      display: flex;
+      gap: 10px;
+    }
+
+    .section {
+      background: #111;
+      border: 1px solid lime;
+      padding: 10px;
+      flex: 1;
+      min-height: 150px;
+      overflow: auto;
+    }
+
+    .progress {
+      width: 100%;
+      background: #333;
+      border: 1px solid #0f0;
+      height: 20px;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: lime;
+      transition: width 0.3s;
+    }
+
+    .input-box input {
+      padding: 5px;
+      background: black;
+      color: lime;
+      border: 1px solid lime;
+      font-family: 'Courier New', monospace;
+    }
+
+    .input-box button {
+      padding: 5px 10px;
+      background: lime;
+      color: black;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .watch-btn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: red;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .video-fullscreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+      background: black;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .video-fullscreen iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+    }
+
+    .loading-text {
+      color: lime;
+      font-size: 20px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      .horizontal {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Giriş Ekranı -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <h2>💀 Sidra Panel 💀</h2>
+      <input type="password" id="password" placeholder="Şifre girin">
+      <br>
+      <button onclick="checkPassword()">Giriş Yap</button>
+      <div class="error" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <!-- Panel Ekranı -->
+  <div id="panelScreen" style="display:none;">
+    <h1 style="color: red; text-align: center; padding: 10px;">💀 Sidra Panel 💀</h1>
+    <div class="container">
+      <div></div>
+      <div class="right-column">
+        <div class="section" id="bruteSection">
+          <h3>🛡 Brute Force Attack</h3>
+          <div class="input-box" id="ipForm">
+            <label>IP Adresi:</label>
+            <input type="text" id="ipInput" placeholder="192.168.1.4">
+            <button onclick="startBrute()">Saldırı Başlat</button>
+          </div>
+          <div class="progress" style="display:none;"><div class="progress-bar" id="bruteBar"></div></div>
+          <div id="bruteLogs"></div>
+        </div>
+        <div class="horizontal">
+          <div class="section">
+            <h3>💰 BTC Kazıcı</h3>
+            <div id="btcLogs"></div>
+          </div>
+          <div class="section">
+            <h3>📷 Kamera Sızması</h3>
+            <div id="camLogs">Bağlantı başlatılıyor...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video ekranı -->
+    <div id="videoScreen" class="video-fullscreen">
+      <div id="loadingText" class="loading-text">📡 Yükleniyor...</div>
+      <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
+
+  <script>
+    function checkPassword() {
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+      if (password === "sidra66#") {
+        document.getElementById("clickSound").play();
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("panelScreen").style.display = "block";
+        fakeMine();
+        fakeCamera();
+      } else {
+        errorMsg.textContent = "❌ Hatalı şifre!";
+      }
+    }
+
+    let bruteBar = null;
+    let bruteLogs = null;
+    let bruteProgress = 0;
+
+    function startBrute() {
+      let ip = document.getElementById("ipInput").value.trim();
+      bruteBar = document.getElementById("bruteBar");
+      bruteLogs = document.getElementById("bruteLogs");
+
+      if (!ip) {
+        alert("Lütfen bir IP adresi girin.");
+        return;
+      }
+
+      if (ip !== "192.168.1.4") {
+        bruteLogs.innerHTML = `<div style="color:red;">❌ Bu hedef desteklenmiyor!</div>`;
+        return;
+      }
+
+      document.getElementById("ipForm").style.display = "none";
+      document.querySelector(".progress").style.display = "block";
+      bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
+      setTimeout(bruteForceFake, 1000);
+    }
+
+    function bruteForceFake() {
+      if (bruteProgress < 100) {
+        bruteProgress += Math.random() * 5;
+        if (bruteProgress > 100) bruteProgress = 100;
+        bruteBar.style.width = bruteProgress + "%";
+        bruteLogs.innerHTML += `<div>🔓 Şifre denendi... %${bruteProgress.toFixed(1)}</div>`;
+        bruteLogs.scrollTop = bruteLogs.scrollHeight;
+        setTimeout(bruteForceFake, 500);
+      } else {
+        bruteLogs.innerHTML += `<div style="color:red;">✔ Erişim sağlandı!</div>`;
+        const watchBtn = document.createElement("button");
+        watchBtn.textContent = "📹 İzle";
+        watchBtn.className = "watch-btn";
+        watchBtn.onclick = playVideo;
+        bruteLogs.appendChild(watchBtn);
+      }
+    }
+
+    function playVideo() {
+      const clickSound = document.getElementById("clickSound");
+      clickSound.play();
+
+      const screen = document.getElementById("videoScreen");
+      const loading = document.getElementById("loadingText");
+      const iframe = document.getElementById("videoFrame");
+
+      screen.style.display = "flex";
+      loading.style.display = "block";
+      iframe.style.display = "none";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        iframe.src = "https://www.youtube.com/embed/4ftlOU2V-_w?autoplay=1&controls=0&modestbranding=1&rel=0&fs=0&disablekb=1&iv_load_policy=3&playsinline=1&mute=1";
+        iframe.style.display = "block";
+      }, 3000);
+    }
+
+    function fakeMine() {
+      const btcLogs = document.getElementById("btcLogs");
+      const amount = (Math.random() * 0.005).toFixed(6);
+      btcLogs.innerHTML += `<div>💸 ${amount} BTC kazıldı...</div>`;
+      btcLogs.scrollTop = btcLogs.scrollHeight;
+      setTimeout(fakeMine, 1000);
+    }
+
+    let camLogsIndex = 0;
+    const camSteps = [
+      "📶 Cihaz aranıyor...",
+      "🔗 IP adresi tespit edildi: 192.168.1.4",
+      "🔐 Port 554 açık...",
+      "🎥 Kamera bağlantısı kuruluyor...",
+      "📸 Görüntü aktarılıyor...",
+      "✔ Görüntü alındı! (programmer)"
+    ];
+
+    function fakeCamera() {
+      const camLogs = document.getElementById("camLogs");
+      if (camLogsIndex < camSteps.length) {
+        camLogs.innerHTML += `<div>${camSteps[camLogsIndex]}</div>`;
+        camLogs.scrollTop = camLogs.scrollHeight;
+        camLogsIndex++;
+        setTimeout(fakeCamera, 1500);
+      }
+    }
+  </script>
+</body>
+</html>
