@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hacker Panel Giriş</title>
+  <title>Sidra Panel</title>
   <style>
     body {
       background-color: black;
@@ -170,7 +170,7 @@
   <!-- Giriş Ekranı -->
   <div class="login-screen" id="loginScreen">
     <div class="login-box">
-      <h2>💀 Sidra Panel 💀</h2>
+      <h2>💀 Sidra Panel Giriş 💀</h2>
       <input type="password" id="password" placeholder="Şifre girin">
       <br>
       <button onclick="checkPassword()">Giriş Yap</button>
@@ -180,7 +180,7 @@
 
   <!-- Panel Ekranı -->
   <div id="panelScreen" style="display:none;">
-    <h1 style="color: red; text-align: center; padding: 10px;">💀 Sidra Panel 💀</h1>
+    <h1 style="color: red; text-align: center; padding: 10px;">💀 SIDRA PANEL 💀</h1>
     <div class="container">
       <div></div>
       <div class="right-column">
@@ -245,36 +245,44 @@
         return;
       }
 
-      if (ip !== "192.168.1.4") {
+      if (ip === "192.168.1.4") {
+        document.getElementById("ipForm").style.display = "none";
+        document.querySelector(".progress").style.display = "block";
+        bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
+        bruteProgress = 0;
+        setTimeout(() => bruteForceFake("4ftlOU2V-_w"), 1000);
+      } 
+      else if (ip === "192.168.1.5") {
+        document.getElementById("ipForm").style.display = "none";
+        document.querySelector(".progress").style.display = "block";
+        bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
+        bruteProgress = 0;
+        setTimeout(() => bruteForceFake("5Rmx37JCSlI"), 1000);
+      } 
+      else {
         bruteLogs.innerHTML = `<div style="color:red;">❌ Bu hedef desteklenmiyor!</div>`;
-        return;
       }
-
-      document.getElementById("ipForm").style.display = "none";
-      document.querySelector(".progress").style.display = "block";
-      bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
-      setTimeout(bruteForceFake, 1000);
     }
 
-    function bruteForceFake() {
+    function bruteForceFake(videoID) {
       if (bruteProgress < 100) {
-        bruteProgress += Math.random() * 5;
+        bruteProgress += Math.random() * 7;
         if (bruteProgress > 100) bruteProgress = 100;
         bruteBar.style.width = bruteProgress + "%";
-        bruteLogs.innerHTML += `<div>🔓 Şifre denendi... %${bruteProgress.toFixed(1)}</div>`;
+        bruteLogs.innerHTML += `<div>🔓 Deneme yapılıyor... %${bruteProgress.toFixed(1)}</div>`;
         bruteLogs.scrollTop = bruteLogs.scrollHeight;
-        setTimeout(bruteForceFake, 500);
+        setTimeout(() => bruteForceFake(videoID), 500);
       } else {
         bruteLogs.innerHTML += `<div style="color:red;">✔ Erişim sağlandı!</div>`;
         const watchBtn = document.createElement("button");
         watchBtn.textContent = "📹 İzle";
         watchBtn.className = "watch-btn";
-        watchBtn.onclick = playVideo;
+        watchBtn.onclick = () => playVideo(videoID);
         bruteLogs.appendChild(watchBtn);
       }
     }
 
-    function playVideo() {
+    function playVideo(videoID = "4ftlOU2V-_w") {
       const clickSound = document.getElementById("clickSound");
       clickSound.play();
 
@@ -288,7 +296,7 @@
 
       setTimeout(() => {
         loading.style.display = "none";
-        iframe.src = "https://www.youtube.com/embed/4ftlOU2V-_w?autoplay=1&controls=0&modestbranding=1&rel=0&fs=0&disablekb=1&iv_load_policy=3&playsinline=1&mute=1";
+        iframe.src = `https://www.youtube.com/embed/${videoID}?autoplay=1&controls=0&modestbranding=1&rel=0&fs=0&disablekb=1&iv_load_policy=3&playsinline=1&mute=1`;
         iframe.style.display = "block";
       }, 3000);
     }
@@ -304,11 +312,11 @@
     let camLogsIndex = 0;
     const camSteps = [
       "📶 Cihaz aranıyor...",
-      "🔗 IP adresi tespit edildi: 192.168.1.4",
+      "🔗 IP adresi tespit edildi: 192.168.1.100",
       "🔐 Port 554 açık...",
       "🎥 Kamera bağlantısı kuruluyor...",
       "📸 Görüntü aktarılıyor...",
-      "✔ Görüntü alındı! (programmer)"
+      "✔ Görüntü alındı! (şaka 😜)"
     ];
 
     function fakeCamera() {
