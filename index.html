@@ -240,26 +240,24 @@
       bruteBar = document.getElementById("bruteBar");
       bruteLogs = document.getElementById("bruteLogs");
 
+      const videos = {
+        "192.168.1.4": "4ftlOU2V-_w",
+        "192.168.1.5": "5Rmx37JCSlI",
+        "192.168.1.6": "2bqslb7aMHU"
+      };
+
       if (!ip) {
         alert("Lütfen bir IP adresi girin.");
         return;
       }
 
-      if (ip === "192.168.1.4") {
+      if (videos[ip]) {
         document.getElementById("ipForm").style.display = "none";
         document.querySelector(".progress").style.display = "block";
         bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
         bruteProgress = 0;
-        setTimeout(() => bruteForceFake("4ftlOU2V-_w"), 1000);
-      } 
-      else if (ip === "192.168.1.5") {
-        document.getElementById("ipForm").style.display = "none";
-        document.querySelector(".progress").style.display = "block";
-        bruteLogs.innerHTML += `<div>🎯 Hedef IP: <strong>${ip}</strong></div>`;
-        bruteProgress = 0;
-        setTimeout(() => bruteForceFake("5Rmx37JCSlI"), 1000);
-      } 
-      else {
+        setTimeout(() => bruteForceFake(videos[ip]), 1000);
+      } else {
         bruteLogs.innerHTML = `<div style="color:red;">❌ Bu hedef desteklenmiyor!</div>`;
       }
     }
@@ -282,7 +280,7 @@
       }
     }
 
-    function playVideo(videoID = "4ftlOU2V-_w") {
+    function playVideo(videoID) {
       const clickSound = document.getElementById("clickSound");
       clickSound.play();
 
